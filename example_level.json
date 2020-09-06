@@ -1,0 +1,82 @@
+{
+  "intro": {
+    "name": "Introduction Screen",
+    "description": "First screen the user is welcomed too.",
+    "tasks": false,
+    "screen_title": " - Welcome",
+    "background_colour": [0, 0, 0],
+    "contents": {
+      "text": {
+        "1": {
+          "label": "Secure Chat Room",
+          "label_font": "8-bit",
+          "label_size": 12,
+          "colour": [255, 255, 255],
+          "position_x": 310,
+          "position_y": 19,
+          "animation_delay": 10
+        }
+      },
+      "buttons": {
+        "1": {
+          "id": 1,
+          "label": "CONNECT",
+          "label_font": "8-bit-b",
+          "label_size": 15,
+          "position_x": 680,
+          "position_y": 550,
+          "colour": [0, 0, 0],
+          "bg_colour_inactive": [255, 255, 255],
+          "bg_colour_active": [0, 0, 0],
+          "width": 150,
+          "height": 35,
+          "animation_delay": 1000,
+          "actions": {
+            "hover": true,
+            "action": "change_lvl",
+            "action_details": "menu"
+          }
+        }
+      },
+      "rectangles": {
+        "1": {
+          "description": "Main outline box",
+          "position_x": 220,
+          "position_y": 10,
+          "width": 800,
+          "height": 700,
+          "bg_colour": [255, 255, 255],
+          "animation_delay": 0
+        }
+      },
+      "inputs": {
+        "1": {
+          "starting_text": "",
+          "position_x": 250,
+          "position_y": 655,
+          "label_font": "8-bit",
+          "label_size": 14,
+          "colour": [255, 255, 255],
+          "bg_colour": [0, 0, 0],
+          "animation_delay": 0,
+          "actions": {
+            "event": "register_user",
+            "linked_to": 0,
+            "submit_on": "K_RETURN",
+            "level": "chat_3"
+          }
+        }
+      },
+      "images": {
+        "1": {
+          "name": "desktop bg image",
+          "source": "resources/images/background.jpg",
+          "x": 0,
+          "y": 0,
+          "resize_x": 1280,
+          "resize_y": 720
+        }
+      }
+    }
+  }
+}

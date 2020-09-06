@@ -1,0 +1,20 @@
+{
+    "colours": {
+        "black": [0, 0, 0],
+        "white": [255, 255, 255],
+        "green": [0, 255, 0]
+    },
+    "config": {
+        "fps": 60,
+        "name": "Soviet Python",
+        "screen_width": 1280,
+        "screen_height": 720
+    },
+    "fonts": {
+        "8-bit-b": "8-bit-b.ttf",
+        "8-bit": "8-bit.ttf",
+        "Icons": "Icons.otf",
+        "AGITPM": "agit_prop/AGITPM.TTF",
+        "proggy_tiny": "proggy_tiny/ProggyTiny.ttf"
+    }
+}
