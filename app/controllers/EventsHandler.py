@@ -123,10 +123,11 @@ class UpdateUserEvent:
             data.seek(0)
             data.truncate(0)
             json.dump(J_Users, data)
+            data.close()
 
 
 class PauseGameEvent:
-    def __init__(self, memory):
+    def __init__(self, memory, event_args):
         self.memory = memory
         self.level = self.memory.bag['current_level']
 

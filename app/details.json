@@ -5,7 +5,7 @@
         "green": [0, 255, 0]
     },
     "config": {
-        "fps": 60,
+        "fps": 30,
         "name": "Soviet Python",
         "screen_width": 1280,
         "screen_height": 720

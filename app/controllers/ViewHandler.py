@@ -105,6 +105,14 @@ class ViewHandler:
                    self.b['animation_delay'], self.animations).draw()
             pygame.display.flip()
 
+    def draw_inputs(self):
+        if "inputs" in self.memory.bag['current_level']['contents']:
+            for input in self.memory.bag['current_level']['contents']['inputs']:
+                self.i = self.memory.bag['current_level']['contents']['inputs'][input]
+                self.memory.bag['inputs'].append(
+                    Input(input, self.i['actions']['submit_on'], self.i['starting_text'], self.i['colour'],
+                          self.i['bg_colour'], self.i['label_font'], self.i['label_size']))
+
     def component_event(self, event):
         """
         Every time the event loop is ran, this gives the categories each component type events for them to check.
@@ -176,9 +184,4 @@ class ViewHandler:
         else:
             self.max_images = 0
 
-        if "inputs" in self.memory.bag['current_level']['contents']:
-            for input in self.memory.bag['current_level']['contents']['inputs']:
-                self.i = self.memory.bag['current_level']['contents']['inputs'][input]
-                self.memory.bag['inputs'].append(
-                    Input(input, self.i['actions']['submit_on'], self.i['starting_text'], self.i['colour'],
-                          self.i['bg_colour'], self.i['label_font'], self.i['label_size']))
+        self.draw_inputs()
