@@ -8,6 +8,7 @@ import pygame
 class App:
     def __init__(self):
         self.Levels, self.Users, self.Fonts, self.Config, self.Colours = "", "", "", "", ""
+        self.bag = {}
         self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
         self.load_all()
@@ -50,3 +51,4 @@ class Helpers:
     @staticmethod
     def current_time():
         return datetime.now().strftime('%I:%M %p')
+

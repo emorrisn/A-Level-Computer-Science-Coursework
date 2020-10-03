@@ -2,13 +2,12 @@ from app.controllers.EventsHandler import *
 
 
 class Text:
-    def __init__(self, memory, label, label_font, label_size, pos_x, pos_y, colour, animation_delay, animations):
+    def __init__(self, app, label, label_font, label_size, pos_x, pos_y, colour, animation_delay, animations):
+        self.app = app
         self.label, self.pos_x, self.pos_y, self.colour = label, pos_x, pos_y, colour
-        self.label_font = pygame.font.Font('resources/fonts/' + getattr(App().Fonts, label_font), label_size)
-        self.screen = pygame.display.get_surface()
+        self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
         self.animation_delay = animation_delay
         self.animations = animations
-        self.memory = memory
 
     def draw(self):
         string = re.search("{(.*?)}", self.label)
@@ -20,14 +19,15 @@ class Text:
         text_rect.midtop = (self.pos_x, self.pos_y)
         if self.animations:
             pygame.time.delay(self.animation_delay)
-        self.screen.blit(text_surface, text_rect)
+        self.app.screen.blit(text_surface, text_rect)
 
 
 class Button:
-    def __init__(self, memory, id, label, label_font, label_size, colour, pos_x, pos_y, bg_colour_inactive, bg_colour_active,
+    def __init__(self, app, id, label, label_font, label_size, colour, pos_x, pos_y, bg_colour_inactive, bg_colour_active,
                  width, height, hover, animation_delay, animations):
+        self.app = app
         self.label = label
-        self.label_font = pygame.font.Font('resources/fonts/' + getattr(App().Fonts, label_font), label_size)
+        self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
         self.int_x = int(pos_x)
         self.int_y = int(pos_y)
         self.colour = colour
@@ -36,15 +36,13 @@ class Button:
         self.w = int(width)
         self.h = int(height)
         self.id = id,
-        self.screen = pygame.display.get_surface()
-        self.surface = pygame.Surface((App().Config.screen_width, App().Config.screen_height), pygame.SRCALPHA, 32)
+        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA, 32)
         self.mouse = pygame.mouse.get_pos()
         self.x = self.int_x - (self.w / 2)
         self.y = self.int_y - (self.h / 3)
         self.hover = hover
         self.animation_delay = animation_delay
         self.animations = animations
-        self.memory = memory
 
     def draw(self):
         button = pygame.event.Event(pygame.USEREVENT, id=self.id, etype="button")
@@ -69,8 +67,8 @@ class Button:
         if self.animations:
             pygame.time.delay(self.animation_delay)
 
-        self.screen.blit(self.surface, (self.surface.get_rect()))
-        self.screen.blit(text_surface, text_rect)
+        self.app.screen.blit(self.surface, (self.surface.get_rect()))
+        self.app.screen.blit(text_surface, text_rect)
 
         if (self.int_x - (self.w / 2)) + self.w > self.mouse[0] > (self.int_x - (self.w / 2)) and (
                 self.int_y - (self.h / 3)) + self.h > self.mouse[1] > (self.int_y - (self.h / 3)):

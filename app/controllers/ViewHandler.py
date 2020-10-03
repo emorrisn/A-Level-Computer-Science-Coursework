@@ -1,19 +1,17 @@
 from app.controllers.ComponentsHandler import *
 from app.controllers.EventsHandler import *
-from app.controllers.MemoryHandler import *
 
 
 class ViewHandler:
 
-    def __init__(self, memory=None):
+    def __init__(self, app):
         self.t, self.b, self.r, self.i = "", "", "", ""
         self.rectangles, self.max_images, self.images, self.max_rectangles = 0, 0, 0, 0
         self.fullscreen, self.typing_started, self.animations = False, False, True
-        self.app = App()
-        self.memory = self.get_memory(memory)
-        self.memory.bag['inputs'] = []
-        self.memory.bag['current_level'] = ""
-        self.memory.bag['user'] = getattr(self.app.Users, "user")  ## TODO remove in production (testing purposes only.)
+        self.app = app
+        self.app.bag['inputs'] = []
+        self.app.bag['current_level'] = ""
+        self.app.bag['user'] = getattr(self.app.Users, "user")  ## TODO remove in production (testing purposes only.)
 
     ## Translates JSON to a displayed level
     def set_current_view(self, view):
@@ -48,10 +46,10 @@ class ViewHandler:
                 self.component_event(event)
 
             ## Update inputs
-            if len(self.memory.bag['inputs']) > 0:
-                for ix, inputx in enumerate(self.memory.bag['inputs']):
+            if len(self.app.bag['inputs']) > 0:
+                for ix, inputx in enumerate(self.app.bag['inputs']):
                     if inputx:
-                        self.i = self.memory.bag['current_level']['contents']['inputs'][str(ix + 1)]
+                        self.i = self.app.bag['current_level']['contents']['inputs'][str(ix + 1)]
                         inputx.update(events)
                         self.app.screen.blit(inputx.get_surface(), (self.i["position_x"], self.i["position_y"]))
 
@@ -61,39 +59,39 @@ class ViewHandler:
         ## TODO: Tasks
 
     def draw_images(self):
-        if "images" in self.memory.bag['current_level']['contents']:
+        if "images" in self.app.bag['current_level']['contents']:
             if self.images < self.max_images:
-                for image in self.memory.bag['current_level']['contents']['images']:
-                    self.i = self.memory.bag['current_level']['contents']['images'][image]
+                for image in self.app.bag['current_level']['contents']['images']:
+                    self.i = self.app.bag['current_level']['contents']['images'][image]
                     Image(self.i['source'], self.i['x'], self.i['y'], self.i['resize_x'], self.i['resize_y']).draw()
                     self.images += 1
 
     def draw_rectangles(self):
-        if "rectangles" in self.memory.bag['current_level']['contents']:
+        if "rectangles" in self.app.bag['current_level']['contents']:
             if self.rectangles < self.max_rectangles:
-                for rectangle in self.memory.bag['current_level']['contents']['rectangles']:
-                    self.r = self.memory.bag['current_level']['contents']['rectangles'][rectangle]
+                for rectangle in self.app.bag['current_level']['contents']['rectangles']:
+                    self.r = self.app.bag['current_level']['contents']['rectangles'][rectangle]
                     Rectangle(self.r['position_x'], self.r['position_y'], self.r['width'], self.r['height'],
                               self.r['bg_colour'], self.r['animation_delay'], self.animations).draw()
                     self.rectangles += 1
                     pygame.display.flip()
 
     def draw_text(self):
-        if "text" in self.memory.bag['current_level']['contents']:
-            for text in self.memory.bag['current_level']['contents']['text']:
-                self.t = self.memory.bag['current_level']['contents']['text'][text]
+        if "text" in self.app.bag['current_level']['contents']:
+            for text in self.app.bag['current_level']['contents']['text']:
+                self.t = self.app.bag['current_level']['contents']['text'][text]
                 if self.t['animation_delay'] != 0:
-                    Text(self.memory, self.t['label'], self.t['label_font'], self.t['label_size'], self.t['position_x'],
+                    Text(self.app, self.t['label'], self.t['label_font'], self.t['label_size'], self.t['position_x'],
                          self.t['position_y'], self.t['colour'], self.t['animation_delay'], self.animations).draw()
                     pygame.display.flip()
                 else:
-                    Text(self.memory, self.t['label'], self.t['label_font'], self.t['label_size'], self.t['position_x'],
+                    Text(self.app, self.t['label'], self.t['label_font'], self.t['label_size'], self.t['position_x'],
                          self.t['position_y'], self.t['colour'], self.t['animation_delay'], self.animations).draw()
 
     def draw_buttons(self):
-        for button in self.memory.bag['current_level']['contents']['buttons']:
-            self.b = self.memory.bag['current_level']['contents']['buttons'][button]
-            Button(self.memory, self.b['id'], self.b['label'], self.b['label_font'], self.b['label_size'],
+        for button in self.app.bag['current_level']['contents']['buttons']:
+            self.b = self.app.bag['current_level']['contents']['buttons'][button]
+            Button(self.app, self.b['id'], self.b['label'], self.b['label_font'], self.b['label_size'],
                    self.b['colour'],
                    self.b['position_x'],
                    self.b['position_y'], self.b['bg_colour_inactive'], self.b['bg_colour_active'],
@@ -102,10 +100,10 @@ class ViewHandler:
             pygame.display.flip()
 
     def draw_inputs(self):
-        if "inputs" in self.memory.bag['current_level']['contents']:
-            for input in self.memory.bag['current_level']['contents']['inputs']:
-                self.i = self.memory.bag['current_level']['contents']['inputs'][input]
-                self.memory.bag['inputs'].append(
+        if "inputs" in self.app.bag['current_level']['contents']:
+            for input in self.app.bag['current_level']['contents']['inputs']:
+                self.i = self.app.bag['current_level']['contents']['inputs'][input]
+                self.app.bag['inputs'].append(
                     Input(input, self.i['actions']['submit_on'], self.i['starting_text'], self.i['colour'],
                           self.i['bg_colour'], self.i['label_font'], self.i['label_size']))
 
@@ -119,40 +117,40 @@ class ViewHandler:
         """
         if event.type == pygame.USEREVENT:
             if event.etype == "button":
-                for button in self.memory.bag['current_level']['contents']['buttons']:
+                for button in self.app.bag['current_level']['contents']['buttons']:
                     if event.id[0] == int(button):
 
                         ## Deal with inputs that are linked to buttons
-                        if "inputs" in self.memory.bag['current_level']['contents']:
-                            for i in self.memory.bag['current_level']['contents']['inputs']:
+                        if "inputs" in self.app.bag['current_level']['contents']:
+                            for i in self.app.bag['current_level']['contents']['inputs']:
                                 ## check if input is linked to a button
-                                if self.memory.bag['current_level']['contents']['inputs'][i]['actions'][
+                                if self.app.bag['current_level']['contents']['inputs'][i]['actions'][
                                     'linked_to'] == int(button):
                                     FindEvent(
-                                        self.memory,
-                                        self.memory.bag['current_level']['contents']['inputs'][i]['actions']['event'],
-                                        self.memory.bag['inputs'][int(i) - 1].get_text().strip()).run()
+                                        self.app,
+                                        self.app.bag['current_level']['contents']['inputs'][i]['actions']['event'],
+                                        self.app.bag['inputs'][int(i) - 1].get_text().strip()).run()
 
                         # Deal with Buttons that are not linked to anything
-                        action_details = self.memory.bag['current_level']['contents']['buttons'][button]['actions'][
+                        action_details = self.app.bag['current_level']['contents']['buttons'][button]['actions'][
                             'action_details']
                         string = re.search("{(.*?)}", action_details)
                         if string:
                             for i in string.groups():
                                 action_details = action_details.replace("{" + i + "}", str(eval(i)), 3)
-                        FindEvent(self.memory,
-                                  self.memory.bag['current_level']['contents']['buttons'][button]['actions']['action'],
+                        FindEvent(self.app,
+                                  self.app.bag['current_level']['contents']['buttons'][button]['actions']['action'],
                                   action_details).run()
             elif event.etype == "input":
-                if "inputs" in self.memory.bag['current_level']['contents']:
-                    for i in self.memory.bag['current_level']['contents']['inputs']:
+                if "inputs" in self.app.bag['current_level']['contents']:
+                    for i in self.app.bag['current_level']['contents']['inputs']:
                         if event.id[0] == i:
-                            if self.memory.bag['current_level']['contents']['inputs'][i]['actions']['linked_to'] == 0:
+                            if self.app.bag['current_level']['contents']['inputs'][i]['actions']['linked_to'] == 0:
                                 FindEvent(
-                                    self.memory,
-                                    self.memory.bag['current_level']['contents']['inputs'][i]['actions']['event'],
-                                    self.memory.bag['inputs'][int(i) - 1].get_text().strip(),
-                                    self.memory.bag['current_level']['contents']['inputs'][i]['actions']['level']).run()
+                                    self.app,
+                                    self.app.bag['current_level']['contents']['inputs'][i]['actions']['event'],
+                                    self.app.bag['inputs'][int(i) - 1].get_text().strip(),
+                                    self.app.bag['current_level']['contents']['inputs'][i]['actions']['level']).run()
 
     def setup_view(self, view):
         """
@@ -162,27 +160,22 @@ class ViewHandler:
             view (str): Name of the view / level
 
         """
-        self.memory.bag['current_level'] = getattr(self.app.Levels, view)
+        self.app.bag['current_level'] = getattr(self.app.Levels, view)
+        self.app.bag['current_level_name'] = view
         self.rectangles = 0
-        self.memory.bag['inputs'] = []
-        pygame.display.set_caption(self.app.Config.name + self.memory.bag['current_level']['screen_title'])
-        self.app.screen.fill(self.memory.bag['current_level']['background_colour'])
+        self.app.bag['inputs'] = []
+        pygame.display.set_caption(self.app.Config.name + self.app.bag['current_level']['screen_title'])
+        self.app.screen.fill(self.app.bag['current_level']['background_colour'])
         self.animations = True
 
-        if "rectangles" in self.memory.bag['current_level']['contents']:
-            self.max_rectangles = len(self.memory.bag['current_level']['contents']['rectangles'])
+        if "rectangles" in self.app.bag['current_level']['contents']:
+            self.max_rectangles = len(self.app.bag['current_level']['contents']['rectangles'])
         else:
             self.max_rectangles = 0
 
-        if "images" in self.memory.bag['current_level']['contents']:
-            self.max_images = len(self.memory.bag['current_level']['contents']['images'])
+        if "images" in self.app.bag['current_level']['contents']:
+            self.max_images = len(self.app.bag['current_level']['contents']['images'])
         else:
             self.max_images = 0
 
         self.draw_inputs()
-
-    def get_memory(self, memory):
-        if memory:
-            return memory
-        else:
-            return MemoryHandler()

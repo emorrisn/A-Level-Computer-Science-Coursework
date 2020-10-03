@@ -170,7 +170,7 @@
           "actions": {
             "hover": true,
             "action": "change_lvl",
-            "action_details": "{ self.memory.bag['pause_continue'] }"
+            "action_details": "{ self.app.bag['previous_level_name'] }"
           }
         }
       },
@@ -298,7 +298,7 @@
           "actions": {
             "hover": true,
             "action": "change_lvl",
-            "action_details": "{ self.memory.bag['pause_continue'] }"
+            "action_details": "{ self.app.bag['pause_continue'] }"
           }
         }
       },
@@ -396,7 +396,7 @@
           "animation_delay": 0
         },
         "11": {
-          "label": ">> { self.memory.bag['previous_level']['task']['response_success'] }",
+          "label": ">> { self.app.bag['previous_level']['task']['response_success'] }",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -423,7 +423,7 @@
           "animation_delay": 0
         },
         "14": {
-          "label": "{ Helpers.number_format(self.memory.bag['user']['score']) } Points",
+          "label": "{ Helpers.number_format(self.app.bag['user']['score']) } Points",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -432,7 +432,7 @@
           "animation_delay": 0
         },
         "15": {
-          "label": "{ Helpers.number_format(self.memory.bag['user']['lives']) } Lives left",
+          "label": "{ Helpers.number_format(self.app.bag['user']['lives']) } Lives left",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -458,7 +458,7 @@
           "actions": {
             "hover": false,
             "action": "change_lvl",
-            "action_details": "{ self.memory.bag['previous_level']['task']['next_success'] }"
+            "action_details": "{ self.app.bag['previous_level']['task']['next_success'] }"
           }
         },
         "2": {
@@ -649,7 +649,7 @@
           "animation_delay": 0
         },
         "11": {
-          "label": ">> { self.memory.bag['previous_level']['task']['response_fail'] }",
+          "label": ">> { self.app.bag['previous_level']['task']['response_fail'] }",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -676,7 +676,7 @@
           "animation_delay": 0
         },
         "14": {
-          "label": "{ Helpers.number_format(self.memory.bag['user']['score']) } Points",
+          "label": "{ Helpers.number_format(self.app.bag['user']['score']) } Points",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -685,7 +685,7 @@
           "animation_delay": 0
         },
         "15": {
-          "label": "{ Helpers.number_format(self.memory.bag['user']['lives']) } Lives left",
+          "label": "{ Helpers.number_format(self.app.bag['user']['lives']) } Lives left",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -730,7 +730,7 @@
           "actions": {
             "hover": true,
             "action": "change_lvl",
-            "action_details": "{ self.memory.bag['previous_level']['task']['next_fail'] }"
+            "action_details": "{ self.app.bag['previous_level']['task']['next_fail'] }"
           }
         }
       },
@@ -1556,7 +1556,7 @@
           "animation_delay": 10
         },
         "16": {
-          "label": "{self.memory.bag['user']['name']}.",
+          "label": "{self.app.bag['user']['name']}.",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -1788,7 +1788,7 @@
           "animation_delay": 10
         },
         "5": {
-          "label": "Good luck agent {self.memory.bag['user']['name']}.",
+          "label": "Good luck agent {self.app.bag['user']['name']}.",
           "label_font": "8-bit-b",
           "label_size": 12,
           "colour": [255, 255, 255],
@@ -1955,8 +1955,8 @@
           "animation_delay": 0,
           "actions": {
             "hover": false,
-            "action": "pause_game",
-            "action_details": "tasks_1_blank"
+            "action": "change_lvl",
+            "action_details": "pause_menu"
           }
         },
         "2": {
