@@ -2,14 +2,14 @@ from datetime import datetime
 import json
 import locale
 
+import pygame
+
 
 class App:
     def __init__(self):
-        self.Levels = ""
-        self.Users = ""
-        self.Fonts = ""
-        self.Config = ""
-        self.Colours = ""
+        self.Levels, self.Users, self.Fonts, self.Config, self.Colours = "", "", "", "", ""
+        self.screen = pygame.display.get_surface()
+        self.clock = pygame.time.Clock()
         self.load_all()
 
     def load_all(self):

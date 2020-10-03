@@ -6,9 +6,12 @@
     },
     "config": {
         "fps": 30,
+        "render_flags": 0,
+        "colour_depth": 32,
         "name": "Soviet Python",
         "screen_width": 1280,
-        "screen_height": 720
+        "screen_height": 720,
+        "starting_screen": "tasks_1_blank"
     },
     "fonts": {
         "8-bit-b": "8-bit-b.ttf",

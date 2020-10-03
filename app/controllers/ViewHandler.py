@@ -8,17 +8,12 @@ class ViewHandler:
     def __init__(self, memory=None):
         self.t, self.b, self.r, self.i = "", "", "", ""
         self.rectangles, self.max_images, self.images, self.max_rectangles = 0, 0, 0, 0
-        self.fullscreen, self.typing_started = False, False
-        self.screen = pygame.display.get_surface()
-        self.clock = pygame.time.Clock()
-        self.animations = True
-        if memory:
-            self.memory = memory
-        else:
-            self.memory = MemoryHandler()
+        self.fullscreen, self.typing_started, self.animations = False, False, True
+        self.app = App()
+        self.memory = self.get_memory(memory)
         self.memory.bag['inputs'] = []
         self.memory.bag['current_level'] = ""
-        self.memory.bag['user'] = getattr(App().Users, "user")  ## TODO remove in production (testing purposes only.)
+        self.memory.bag['user'] = getattr(self.app.Users, "user")  ## TODO remove in production (testing purposes only.)
 
     ## Translates JSON to a displayed level
     def set_current_view(self, view):
@@ -46,7 +41,8 @@ class ViewHandler:
                             pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                             self.fullscreen = True
                         else:
-                            pygame.display.set_mode((App().Config.screen_width, App().Config.screen_height), 0, 32)
+                            pygame.display.set_mode((self.app.Config.screen_width, self.app.Config.screen_height), 0,
+                                                    32)
                             self.fullscreen = False
                         self.set_current_view(view)
                 self.component_event(event)
@@ -57,10 +53,10 @@ class ViewHandler:
                     if inputx:
                         self.i = self.memory.bag['current_level']['contents']['inputs'][str(ix + 1)]
                         inputx.update(events)
-                        self.screen.blit(inputx.get_surface(), (self.i["position_x"], self.i["position_y"]))
+                        self.app.screen.blit(inputx.get_surface(), (self.i["position_x"], self.i["position_y"]))
 
             pygame.display.update()
-            self.clock.tick(App().Config.fps)
+            self.app.clock.tick(self.app.Config.fps)
 
         ## TODO: Tasks
 
@@ -131,8 +127,7 @@ class ViewHandler:
                             for i in self.memory.bag['current_level']['contents']['inputs']:
                                 ## check if input is linked to a button
                                 if self.memory.bag['current_level']['contents']['inputs'][i]['actions'][
-                                    'linked_to'] == int(
-                                    button):
+                                    'linked_to'] == int(button):
                                     FindEvent(
                                         self.memory,
                                         self.memory.bag['current_level']['contents']['inputs'][i]['actions']['event'],
@@ -167,11 +162,11 @@ class ViewHandler:
             view (str): Name of the view / level
 
         """
-        self.memory.bag['current_level'] = getattr(App().Levels, view)
+        self.memory.bag['current_level'] = getattr(self.app.Levels, view)
         self.rectangles = 0
         self.memory.bag['inputs'] = []
-        pygame.display.set_caption(App().Config.name + self.memory.bag['current_level']['screen_title'])
-        self.screen.fill(self.memory.bag['current_level']['background_colour'])
+        pygame.display.set_caption(self.app.Config.name + self.memory.bag['current_level']['screen_title'])
+        self.app.screen.fill(self.memory.bag['current_level']['background_colour'])
         self.animations = True
 
         if "rectangles" in self.memory.bag['current_level']['contents']:
@@ -185,3 +180,9 @@ class ViewHandler:
             self.max_images = 0
 
         self.draw_inputs()
+
+    def get_memory(self, memory):
+        if memory:
+            return memory
+        else:
+            return MemoryHandler()
