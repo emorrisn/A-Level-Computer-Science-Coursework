@@ -23,11 +23,11 @@ class Text:
 
 
 class Button:
-    def __init__(self, app, id, label, label_font, label_size, colour, pos_x, pos_y, bg_colour_inactive, bg_colour_active,
+    def __init__(self, app, id, label, font_name, font_size, colour, pos_x, pos_y, bg_colour_inactive, bg_colour_active,
                  width, height, hover, animation_delay, animations):
         self.app = app
         self.label = label
-        self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
+        self.label_font = Helpers.font(app, font_name, font_size)
         self.int_x = int(pos_x)
         self.int_y = int(pos_y)
         self.colour = colour
@@ -77,50 +77,51 @@ class Button:
 
 
 class Rectangle:
-    def __init__(self, position_x, position_y, width, height, bg_colour, animation_delay, animations):
+    def __init__(self, app, position_x, position_y, width, height, bg_colour, animation_delay, animations):
+        self.app = app
         self.position_x = position_x
         self.position_y = position_y
         self.width = width
         self.height = height
         self.bg_colour = bg_colour
-        self.screen = pygame.display.get_surface()
-        self.surface = pygame.Surface((App().Config.screen_width, App().Config.screen_height), pygame.SRCALPHA, 32)
+        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA, 32)
         self.animation_delay = animation_delay
         self.animations = animations
 
     def draw(self):
         pygame.draw.rect(self.surface, self.bg_colour, (self.position_x, self.position_y, self.width, self.height))
-        self.screen.blit(self.surface, (self.surface.get_rect()))
+        self.app.screen.blit(self.surface, (self.surface.get_rect()))
         if self.animations:
             pygame.time.delay(self.animation_delay)
 
 
 class Image:
-    def __init__(self, source, position_x, position_y, resize_x, resize_y):
+    def __init__(self, app, source, position_x, position_y, resize_x, resize_y):
         self.position_x = position_x
         self.position_y = position_y
         self.resize_x = resize_x
         self.resize_y = resize_y
         self.source = source
-        self.screen = pygame.display.get_surface()
+        self.app = app
         self.image = ""
 
     def draw(self):
         self.image = pygame.image.load(self.source)
         self.image = pygame.transform.scale(self.image, (self.resize_x, self.resize_y))
-        self.screen.blit(self.image, (self.position_x, self.position_y))
+        self.app.screen.blit(self.image, (self.position_x, self.position_y))
 
 
 class Input:
-    def __init__(self, id, submit_on, initial_string="", text_color=(0, 0, 0), bg_colour=(0, 0, 0), label_font="",
-                 label_size="", max_string_length=-1):
+    def __init__(self, app, id, submit_on, initial_string="", text_color=(0, 0, 0), bg_colour=(0, 0, 0), font_name="",
+                 font_size="", max_string_length=-1):
+        self.app = app
         self.text_color = text_color
         self.max_string_length = max_string_length
         self.input_string = initial_string
-        self.font_object = pygame.font.Font('resources/fonts/' + getattr(App().Fonts, label_font), label_size)
+        self.font_object = Helpers.font(app, font_name, font_size)
         self.surface = pygame.Surface((1, 1))
         self.kr_counters = {}
-        self.cursor_surface = pygame.Surface((int(label_size / 20 + 2), label_size))
+        self.cursor_surface = pygame.Surface((int(font_size / 20 + 2), font_size))
         self.cursor_surface.fill(text_color)
         self.cursor_position = len(initial_string)  # Inside text
         self.bg_colour = bg_colour
@@ -157,7 +158,7 @@ class Input:
                 self.surface.blit(self.surface, (self.surface.get_width(), 0))
 
         for key in self.kr_counters:
-            self.kr_counters[key][0] += pygame.time.Clock().get_time()
+            self.kr_counters[key][0] += self.app.clock.get_time()
             if self.kr_counters[key][0] >= 400:
                 self.kr_counters[key][0] = 365
                 event_key, event_unicode = key, self.kr_counters[key][1]

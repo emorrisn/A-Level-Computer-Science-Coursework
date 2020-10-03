@@ -63,7 +63,7 @@ class ViewHandler:
             if self.images < self.max_images:
                 for image in self.app.bag['current_level']['contents']['images']:
                     self.i = self.app.bag['current_level']['contents']['images'][image]
-                    Image(self.i['source'], self.i['x'], self.i['y'], self.i['resize_x'], self.i['resize_y']).draw()
+                    Image(self.app, self.i['source'], self.i['x'], self.i['y'], self.i['resize_x'], self.i['resize_y']).draw()
                     self.images += 1
 
     def draw_rectangles(self):
@@ -71,7 +71,7 @@ class ViewHandler:
             if self.rectangles < self.max_rectangles:
                 for rectangle in self.app.bag['current_level']['contents']['rectangles']:
                     self.r = self.app.bag['current_level']['contents']['rectangles'][rectangle]
-                    Rectangle(self.r['position_x'], self.r['position_y'], self.r['width'], self.r['height'],
+                    Rectangle(self.app, self.r['position_x'], self.r['position_y'], self.r['width'], self.r['height'],
                               self.r['bg_colour'], self.r['animation_delay'], self.animations).draw()
                     self.rectangles += 1
                     pygame.display.flip()
@@ -104,7 +104,7 @@ class ViewHandler:
             for input in self.app.bag['current_level']['contents']['inputs']:
                 self.i = self.app.bag['current_level']['contents']['inputs'][input]
                 self.app.bag['inputs'].append(
-                    Input(input, self.i['actions']['submit_on'], self.i['starting_text'], self.i['colour'],
+                    Input(self.app, input, self.i['actions']['submit_on'], self.i['starting_text'], self.i['colour'],
                           self.i['bg_colour'], self.i['label_font'], self.i['label_size']))
 
     def component_event(self, event):

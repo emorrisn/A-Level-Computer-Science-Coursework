@@ -124,6 +124,7 @@ class UpdateUserEvent:
             json.dump(J_Users, data)
             data.close()
 
+
 class ContinueUserEvent:
     def __init__(self, app, username):
         self.app = app

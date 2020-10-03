@@ -52,3 +52,6 @@ class Helpers:
     def current_time():
         return datetime.now().strftime('%I:%M %p')
 
+    @staticmethod
+    def font(app, font, size):
+        return pygame.font.Font('resources/fonts/' + getattr(app.Fonts, font), size)
