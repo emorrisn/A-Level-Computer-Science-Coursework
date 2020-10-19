@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 import locale
-
 import pygame
 
 

@@ -3,11 +3,8 @@ from app.controllers.EventsHandler import *
 
 class Text:
     def __init__(self, app, label, label_font, label_size, pos_x, pos_y, colour, animation_delay, animations):
-        self.app = app
-        self.label, self.pos_x, self.pos_y, self.colour = label, pos_x, pos_y, colour
+        self.app, self.label, self.pos_x, self.pos_y, self.colour, self.animation_delay, self.animations = app, label, pos_x, pos_y, colour, animation_delay, animations
         self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
-        self.animation_delay = animation_delay
-        self.animations = animations
 
     def draw(self):
         string = re.search("{(.*?)}", self.label)
@@ -25,14 +22,10 @@ class Text:
 class Button:
     def __init__(self, app, id, label, font_name, font_size, colour, pos_x, pos_y, bg_colour_inactive, bg_colour_active,
                  width, height, hover, animation_delay, animations):
-        self.app = app
-        self.label = label
+        self.app, self.label, self.colour, self.bg_colour_inactive, self.bg_colour_active, self.hover, self.animation_delay, self.animations = app, label, colour, bg_colour_inactive, bg_colour_active, hover, animation_delay, animations
         self.label_font = Helpers.font(app, font_name, font_size)
         self.int_x = int(pos_x)
         self.int_y = int(pos_y)
-        self.colour = colour
-        self.bg_colour_inactive = bg_colour_inactive
-        self.bg_colour_active = bg_colour_active
         self.w = int(width)
         self.h = int(height)
         self.id = id,
@@ -40,9 +33,6 @@ class Button:
         self.mouse = pygame.mouse.get_pos()
         self.x = self.int_x - (self.w / 2)
         self.y = self.int_y - (self.h / 3)
-        self.hover = hover
-        self.animation_delay = animation_delay
-        self.animations = animations
 
     def draw(self):
         button = pygame.event.Event(pygame.USEREVENT, id=self.id, etype="button")
@@ -78,15 +68,8 @@ class Button:
 
 class Rectangle:
     def __init__(self, app, position_x, position_y, width, height, bg_colour, animation_delay, animations):
-        self.app = app
-        self.position_x = position_x
-        self.position_y = position_y
-        self.width = width
-        self.height = height
-        self.bg_colour = bg_colour
+        self.app, self.position_x, self.position_y, self.width, self.height, self.bg_colour, self.animation_delay, self.animations = app, position_x, position_y, width, height, bg_colour, animation_delay, animations
         self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA, 32)
-        self.animation_delay = animation_delay
-        self.animations = animations
 
     def draw(self):
         pygame.draw.rect(self.surface, self.bg_colour, (self.position_x, self.position_y, self.width, self.height))
@@ -97,12 +80,7 @@ class Rectangle:
 
 class Image:
     def __init__(self, app, source, position_x, position_y, resize_x, resize_y):
-        self.position_x = position_x
-        self.position_y = position_y
-        self.resize_x = resize_x
-        self.resize_y = resize_y
-        self.source = source
-        self.app = app
+        self.app, position_x, self.position_y, self.resize_x, self.resize_y, self.source = app, position_x, position_y, resize_x, resize_y, source
         self.image = ""
 
     def draw(self):
@@ -114,19 +92,13 @@ class Image:
 class Input:
     def __init__(self, app, id, submit_on, initial_string="", text_color=(0, 0, 0), bg_colour=(0, 0, 0), font_name="",
                  font_size="", max_string_length=-1):
-        self.app = app
-        self.text_color = text_color
-        self.max_string_length = max_string_length
-        self.input_string = initial_string
+        self.app, self.text_color, self.max_string_length, self.input_string, self.bg_colour, self.submit_on, self.id = app, text_color, max_string_length, initial_string, bg_colour, submit_on, id
         self.font_object = Helpers.font(app, font_name, font_size)
         self.surface = pygame.Surface((1, 1))
         self.kr_counters = {}
         self.cursor_surface = pygame.Surface((int(font_size / 20 + 2), font_size))
         self.cursor_surface.fill(text_color)
         self.cursor_position = len(initial_string)  # Inside text
-        self.bg_colour = bg_colour
-        self.submit_on = submit_on
-        self.id = id
         self.key_blacklist = [13, 99, 122, 120, 118]
 
     def update(self, events):
