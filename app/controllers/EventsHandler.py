@@ -33,7 +33,7 @@ class CheckAnswer:
     def check(self):
         if self.level['tasks']:
             correct_answer = self.level['task']['answer']
-            if self.text == correct_answer:
+            if self.text.lower() == correct_answer.lower():
                 ## Give 10 points to the user.
                 UpdateUserEvent(self.app).add_score(10)
                 ChangeLevelEvent(self.app, self.level['task']['return_success']).change()
