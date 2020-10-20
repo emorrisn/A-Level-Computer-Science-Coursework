@@ -53,4 +53,5 @@ class Helpers:
 
     @staticmethod
     def font(app, font, size):
-        return pygame.font.Font('resources/fonts/' + getattr(app.Fonts, font), size)
+        cwd = os.path.dirname(os.path.abspath(__file__))
+        return pygame.font.Font(os.path.join(cwd, '../resources/fonts/') + getattr(app.Fonts, font), size)
