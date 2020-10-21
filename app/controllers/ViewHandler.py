@@ -134,13 +134,9 @@ class ViewHandler:
                         # Deal with Buttons that are not linked to anything
                         action_details = self.app.bag['current_level']['contents']['buttons'][button]['actions'][
                             'action_details']
-                        string = re.search("{(.*?)}", action_details)
-                        if string:
-                            for i in string.groups():
-                                action_details = action_details.replace("{" + i + "}", str(eval(i)), 3)
                         FindEvent(self.app,
                                   self.app.bag['current_level']['contents']['buttons'][button]['actions']['action'],
-                                  action_details).run()
+                                  Helpers.smart_translate(action_details)).run()
             elif event.etype == "input":
                 if "inputs" in self.app.bag['current_level']['contents']:
                     for i in self.app.bag['current_level']['contents']['inputs']:

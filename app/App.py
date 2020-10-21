@@ -1,7 +1,9 @@
+import re
 from datetime import datetime
 import json
 import locale
 import pygame
+import os
 
 
 class App:
@@ -50,6 +52,16 @@ class Helpers:
     @staticmethod
     def current_time():
         return datetime.now().strftime('%I:%M %p')
+
+    @staticmethod
+    def smart_translate(text_string):
+        new_string = re.search("{(.*?)}", text_string)
+        if new_string:
+            for i in new_string.groups():
+                text_string = text_string.replace("{" + i + "}", str(eval(i)), 3)
+            return text_string
+        else:
+            return text_string
 
     @staticmethod
     def font(app, font, size):

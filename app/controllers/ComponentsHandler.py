@@ -7,11 +7,7 @@ class Text:
         self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
 
     def draw(self):
-        string = re.search("{(.*?)}", self.label)
-        if string:
-            for i in string.groups():
-                self.label = self.label.replace("{" + i + "}", str(eval(i)), 3)
-        text_surface = self.label_font.render(self.label, True, self.colour)
+        text_surface = self.label_font.render(Helpers.smart_translate(self.label), True, self.colour)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (self.pos_x, self.pos_y)
         if self.animations:
@@ -29,7 +25,8 @@ class Button:
         self.w = int(width)
         self.h = int(height)
         self.id = id,
-        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA, 32)
+        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA,
+                                      32)
         self.mouse = pygame.mouse.get_pos()
         self.x = self.int_x - (self.w / 2)
         self.y = self.int_y - (self.h / 3)
@@ -45,13 +42,7 @@ class Button:
             pygame.draw.rect(self.surface, self.bg_colour_inactive, (self.x - 5, self.y - 5, self.w + 10, self.h + 10))
             pygame.draw.rect(self.surface, self.bg_colour_inactive, (self.x, self.y, self.w, self.h))
             pygame.display.update()
-
-        string = re.search("{(.*?)}", self.label)
-        if string:
-            for i in string.groups():
-                self.label = self.label.replace("{" + i + "}", str(eval(i)), 3)
-
-        text_surface = self.label_font.render(self.label, True, self.colour)
+        text_surface = self.label_font.render(Helpers.smart_translate(self.label), True, self.colour)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (self.int_x, self.int_y)
         if self.animations:
@@ -69,9 +60,15 @@ class Button:
 class Rectangle:
     def __init__(self, app, position_x, position_y, width, height, bg_colour, animation_delay, animations):
         self.app, self.position_x, self.position_y, self.width, self.height, self.bg_colour, self.animation_delay, self.animations = app, position_x, position_y, width, height, bg_colour, animation_delay, animations
-        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA, 32)
+        self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA,32)
 
     def draw(self):
+        pygame.draw.rect(self.surface, [255, 255, 255, 50],
+                         (self.position_x + 5, self.position_y + 5, self.width, self.height))
+        pygame.transform.smoothscale(self.surface, 12)
+        self.app.screen.blit(self.surface, (self.surface.get_rect()))
+
+
         pygame.draw.rect(self.surface, self.bg_colour, (self.position_x, self.position_y, self.width, self.height))
         self.app.screen.blit(self.surface, (self.surface.get_rect()))
         if self.animations:
@@ -92,7 +89,7 @@ class Image:
 class Input:
     def __init__(self, app, id, submit_on, initial_string="", text_color=(0, 0, 0), bg_colour=(0, 0, 0), font_name="",
                  font_size="", max_string_length=-1):
-        self.app, self.text_color, self.max_string_length, self.input_string, self.bg_colour, self.submit_on, self.id = app, text_color, max_string_length, initial_string, bg_colour, submit_on, id
+        self.app, self.text_color, self.max_string_length, self.input_string, self.bg_colour, self.submit_on, self.id = app, text_color, max_string_length, Helpers.smart_translate(initial_string), bg_colour, submit_on, id
         self.font_object = Helpers.font(app, font_name, font_size)
         self.surface = pygame.Surface((1, 1))
         self.kr_counters = {}
@@ -118,8 +115,8 @@ class Input:
                 elif len(self.input_string) < self.max_string_length or self.max_string_length == -1:
                     if event.key not in self.key_blacklist and event.key < 128:
                         self.input_string = (
-                                    self.input_string[:self.cursor_position] + event.unicode + self.input_string[
-                                                                                               self.cursor_position:])
+                                self.input_string[:self.cursor_position] + event.unicode + self.input_string[
+                                                                                           self.cursor_position:])
                         self.cursor_position += len(event.unicode)
                 if event.key == eval("pygame." + self.submit_on):
                     i = pygame.event.Event(pygame.USEREVENT, id=self.id, etype="input")

@@ -11,7 +11,7 @@
         "name": "Soviet Python",
         "screen_width": 1280,
         "screen_height": 720,
-        "starting_screen": "tasks_1_blank"
+        "starting_screen": "menu"
     },
     "fonts": {
         "8-bit-b": "8-bit-b.ttf",
