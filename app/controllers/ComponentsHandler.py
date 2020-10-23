@@ -63,12 +63,6 @@ class Rectangle:
         self.surface = pygame.Surface((self.app.Config.screen_width, self.app.Config.screen_height), pygame.SRCALPHA,32)
 
     def draw(self):
-        pygame.draw.rect(self.surface, [255, 255, 255, 50],
-                         (self.position_x + 5, self.position_y + 5, self.width, self.height))
-        pygame.transform.smoothscale(self.surface, 12)
-        self.app.screen.blit(self.surface, (self.surface.get_rect()))
-
-
         pygame.draw.rect(self.surface, self.bg_colour, (self.position_x, self.position_y, self.width, self.height))
         self.app.screen.blit(self.surface, (self.surface.get_rect()))
         if self.animations:
