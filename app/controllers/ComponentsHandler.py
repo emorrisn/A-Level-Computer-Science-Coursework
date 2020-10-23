@@ -7,7 +7,7 @@ class Text:
         self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
 
     def draw(self):
-        text_surface = self.label_font.render(Helpers.smart_translate(self.label), True, self.colour)
+        text_surface = self.label_font.render(Helpers.smart_translate(self, self.label), True, self.colour)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (self.pos_x, self.pos_y)
         if self.animations:
@@ -42,7 +42,7 @@ class Button:
             pygame.draw.rect(self.surface, self.bg_colour_inactive, (self.x - 5, self.y - 5, self.w + 10, self.h + 10))
             pygame.draw.rect(self.surface, self.bg_colour_inactive, (self.x, self.y, self.w, self.h))
             pygame.display.update()
-        text_surface = self.label_font.render(Helpers.smart_translate(self.label), True, self.colour)
+        text_surface = self.label_font.render(Helpers.smart_translate(self, self.label), True, self.colour)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (self.int_x, self.int_y)
         if self.animations:
@@ -83,7 +83,7 @@ class Image:
 class Input:
     def __init__(self, app, id, submit_on, initial_string="", text_color=(0, 0, 0), bg_colour=(0, 0, 0), font_name="",
                  font_size="", max_string_length=-1):
-        self.app, self.text_color, self.max_string_length, self.input_string, self.bg_colour, self.submit_on, self.id = app, text_color, max_string_length, Helpers.smart_translate(initial_string), bg_colour, submit_on, id
+        self.app, self.text_color, self.max_string_length, self.input_string, self.bg_colour, self.submit_on, self.id = app, text_color, max_string_length, Helpers.smart_translate(self, initial_string), bg_colour, submit_on, id
         self.font_object = Helpers.font(app, font_name, font_size)
         self.surface = pygame.Surface((1, 1))
         self.kr_counters = {}

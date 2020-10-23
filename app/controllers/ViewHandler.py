@@ -136,7 +136,7 @@ class ViewHandler:
                             'action_details']
                         FindEvent(self.app,
                                   self.app.bag['current_level']['contents']['buttons'][button]['actions']['action'],
-                                  Helpers.smart_translate(action_details)).run()
+                                  Helpers.smart_translate(self, action_details)).run()
             elif event.etype == "input":
                 if "inputs" in self.app.bag['current_level']['contents']:
                     for i in self.app.bag['current_level']['contents']['inputs']:

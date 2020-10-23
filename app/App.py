@@ -54,7 +54,7 @@ class Helpers:
         return datetime.now().strftime('%I:%M %p')
 
     @staticmethod
-    def smart_translate(text_string):
+    def smart_translate(self, text_string):
         new_string = re.search("{(.*?)}", text_string)
         if new_string:
             for i in new_string.groups():
