@@ -71,7 +71,7 @@ class Rectangle:
 
 class Image:
     def __init__(self, app, source, position_x, position_y, resize_x, resize_y):
-        self.app, position_x, self.position_y, self.resize_x, self.resize_y, self.source = app, position_x, position_y, resize_x, resize_y, source
+        self.app, self.position_x, self.position_y, self.resize_x, self.resize_y, self.source = app, position_x, position_y, resize_x, resize_y, source
         self.image = ""
 
     def draw(self):

@@ -55,12 +55,17 @@ class Helpers:
 
     @staticmethod
     def smart_translate(self, text_string):
-        new_string = re.search("{(.*?)}", text_string)
-        if new_string:
-            for i in new_string.groups():
-                text_string = text_string.replace("{" + i + "}", str(eval(i)), 3)
-            return text_string
-        else:
+        try:
+            new_string = re.search("{(.*?)}", text_string)
+            if new_string:
+                for i in new_string.groups():
+                    text_string = text_string.replace("{" + i + "}", str(eval(i)), 3)
+                return text_string
+            else:
+                return text_string
+        except Exception as e:
+            print('[ERROR] could not evaluate smart attribute string. ')
+        finally:
             return text_string
 
     @staticmethod
