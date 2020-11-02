@@ -11,12 +11,11 @@ class ViewHandler:
         self.app = app
         self.app.bag['inputs'] = []
         self.app.bag['current_level'] = ""
-        self.app.bag['user'] = getattr(self.app.Users, "user")  ## TODO remove in production (testing purposes only.)
+        ## self.app.bag['user'] = getattr(self.app.Users, "user")  ## (testing purposes only.)
 
     ## Translates JSON to a displayed level
     def set_current_view(self, view):
         self.setup_view(view)
-
         ## Loop for the entire view
         while True:
             ## Draw all components of the view
@@ -56,8 +55,6 @@ class ViewHandler:
             pygame.display.update()
             self.app.clock.tick(self.app.Config.fps)
 
-        ## TODO: Tasks
-
     def draw_images(self):
         if "images" in self.app.bag['current_level']['contents']:
             if self.images < self.max_images:
@@ -89,15 +86,16 @@ class ViewHandler:
                          self.t['position_y'], self.t['colour'], self.t['animation_delay'], self.animations).draw()
 
     def draw_buttons(self):
-        for button in self.app.bag['current_level']['contents']['buttons']:
-            self.b = self.app.bag['current_level']['contents']['buttons'][button]
-            Button(self.app, self.b['id'], self.b['label'], self.b['label_font'], self.b['label_size'],
-                   self.b['colour'],
-                   self.b['position_x'],
-                   self.b['position_y'], self.b['bg_colour_inactive'], self.b['bg_colour_active'],
-                   self.b['width'], self.b['height'], self.b['actions']['hover'],
-                   self.b['animation_delay'], self.animations).draw()
-            pygame.display.flip()
+        if "buttons" in self.app.bag['current_level']['contents']:
+            for button in self.app.bag['current_level']['contents']['buttons']:
+                self.b = self.app.bag['current_level']['contents']['buttons'][button]
+                Button(self.app, self.b['id'], self.b['label'], self.b['label_font'], self.b['label_size'],
+                       self.b['colour'],
+                       self.b['position_x'],
+                       self.b['position_y'], self.b['bg_colour_inactive'], self.b['bg_colour_active'],
+                       self.b['width'], self.b['height'], self.b['actions']['hover'],
+                       self.b['animation_delay'], self.animations).draw()
+                pygame.display.flip()
 
     def draw_inputs(self):
         if "inputs" in self.app.bag['current_level']['contents']:

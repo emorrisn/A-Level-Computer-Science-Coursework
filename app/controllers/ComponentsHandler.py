@@ -4,7 +4,7 @@ from app.controllers.EventsHandler import *
 class Text:
     def __init__(self, app, label, label_font, label_size, pos_x, pos_y, colour, animation_delay, animations):
         self.app, self.label, self.pos_x, self.pos_y, self.colour, self.animation_delay, self.animations = app, label, pos_x, pos_y, colour, animation_delay, animations
-        self.label_font = pygame.font.Font('resources/fonts/' + getattr(self.app.Fonts, label_font), label_size)
+        self.label_font = Helpers.font(app, label_font, label_size)
 
     def draw(self):
         text_surface = self.label_font.render(Helpers.smart_translate(self, self.label), True, self.colour)

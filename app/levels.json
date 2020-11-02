@@ -933,7 +933,7 @@
     "contents": {
       "text": {
         "1": {
-          "label": "Enter your name",
+          "label": "Enter your name.",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [0, 152, 0],
@@ -942,7 +942,7 @@
           "animation_delay": 10
         },
         "2": {
-          "label": "Press Enter to submit",
+          "label": "Press enter to submit",
           "label_font": "8-bit",
           "label_size": 12,
           "colour": [0, 152, 0],

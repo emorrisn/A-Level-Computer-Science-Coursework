@@ -12,6 +12,7 @@ class App:
         self.bag = {}
         self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
+        self.cwd = os.path.dirname(os.path.abspath(__file__))
         self.load_all()
 
     def load_all(self):
@@ -22,23 +23,23 @@ class App:
         self.load_Users()
 
     def load_Levels(self):
-        with open('app/levels.json') as data:
+        with open(os.path.join(self.cwd, 'levels.json')) as data:
             self.Levels = type("Levels", (), json.load(data))
 
     def load_Users(self):
-        with open('app/users.json') as data:
+        with open(os.path.join(self.cwd, 'users.json')) as data:
             self.Users = type("Users", (), json.load(data))
 
     def load_Fonts(self):
-        with open('app/details.json') as data:
+        with open(os.path.join(self.cwd, 'details.json')) as data:
             self.Fonts = type("Fonts", (), json.load(data)['fonts'])
 
     def load_Config(self):
-        with open('app/details.json') as data:
+        with open(os.path.join(self.cwd, 'details.json')) as data:
             self.Config = type("Config", (), json.load(data)['config'])
 
     def load_Colours(self):
-        with open('app/details.json') as data:
+        with open(os.path.join(self.cwd, 'details.json')) as data:
             self.Colours = type("Colours", (), json.load(data)['colours'])
 
 
@@ -52,6 +53,14 @@ class Helpers:
     @staticmethod
     def current_time():
         return datetime.now().strftime('%I:%M %p')
+
+    @staticmethod
+    def validate(text):
+        regex = re.compile(r'^[A-Za-z]{3}\d{3}$')
+        if regex.match(text):
+            return text
+        else:
+            return False
 
     @staticmethod
     def smart_translate(self, text_string):

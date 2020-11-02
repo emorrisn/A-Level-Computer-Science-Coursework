@@ -65,6 +65,7 @@ class UpdateUserEvent:
     def __init__(self, app):
         self.user = []
         self.app = app
+        self.cwd = os.path.dirname(os.path.abspath(__file__))
 
     def update_level(self, level):
         try:
@@ -112,11 +113,11 @@ class UpdateUserEvent:
 
     def login(self, username):
         self.app.bag['user'] = getattr(App().Users, username)
-        with open('app/users.json') as data:
+        with open(os.path.join(self.cwd, '../users.json')) as data:
             Users = type("Users", (), json.load(data))
 
     def commit_changes(self):
-        with open('app/users.json', 'r+') as data:
+        with open(os.path.join(self.cwd, '../users.json'), 'r+') as data:
             J_Users = json.load(data)
             J_Users[self.user['name']] = self.user
             data.seek(0)
@@ -129,16 +130,14 @@ class ContinueUserEvent:
     def __init__(self, app, username):
         self.app = app
         self.username = username
-        self.user = ""
 
     def do(self):
-        UpdateUserEvent(self.app).login(self.username)
         try:
-            self.user = self.app.bag['user_name']
+            UpdateUserEvent(self.app).login(self.username)
+            ChangeLevelEvent(self.app, self.app.bag['user']['stage']).change()
         except Exception as e:
+            print(e)
             ChangeLevelEvent(self.app, "menu").change()
-        else:
-            ChangeLevelEvent(self.app, self.user['stage']).change()
 
 
 class RegisterUserEvent:
@@ -146,10 +145,11 @@ class RegisterUserEvent:
         self.username = username
         self.level = level
         self.app = app
+        self.cwd = os.path.dirname(os.path.abspath(__file__))
 
     def register(self):
         ## Currently overwrites user, when continue feature maybe ask user?
-        with open('app/users.json', 'r+') as data:
+        with open(os.path.join(self.cwd, '../users.json'), 'r+') as data:
             J_Users = json.load(data)
             J_Users[self.username] = {"name": self.username, "lives": 3, "score": 0, "stage": ""}
             data.seek(0)
